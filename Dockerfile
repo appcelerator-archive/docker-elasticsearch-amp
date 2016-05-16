@@ -10,7 +10,7 @@ EXPOSE 9200 9300
 # Add ContainerPilot
 RUN curl -Lo /tmp/cb.tar.gz https://github.com/joyent/containerpilot/releases/download/2.1.0/containerpilot-2.1.0.tar.gz \
 && tar -xz -f /tmp/cb.tar.gz \
-&& mv ./containerpilot /bin/
+&& mv ./containerpilot /bin/ \
 && chown elasticsearch /etc
 COPY containerpilot.json /etc/containerpilot.json
 COPY start.sh ./start.sh
