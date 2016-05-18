@@ -16,6 +16,7 @@ COPY containerpilot.json /etc/containerpilot.json
 COPY start.sh ./start.sh
 
 
+ENV CP_LOG_LEVEL=ERROR
 ENV CONTAINERPILOT=file:///etc/containerpilot.json
 
 USER elasticsearch
