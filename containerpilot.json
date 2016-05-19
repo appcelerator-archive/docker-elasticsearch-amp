@@ -10,8 +10,8 @@
       "name": "elasticsearch",
       "port": 9092,
       "health": "pidof java",
-      "poll": 10,
-      "ttl": 30
+      "poll": [poll],
+      "ttl": [ttl]
     }
   ]
 }
