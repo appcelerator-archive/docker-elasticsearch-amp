@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y vim bash
 
 EXPOSE 9200 9300
 
+# Update configuration file
+COPY elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
+
 # Add ContainerPilot
 ENV CONTAINERPILOT=2.1.0
 RUN curl -Lo /tmp/cb.tar.gz https://github.com/joyent/containerpilot/releases/download/$CONTAINERPILOT/containerpilot-$CONTAINERPILOT.tar.gz \
@@ -15,7 +18,6 @@ RUN curl -Lo /tmp/cb.tar.gz https://github.com/joyent/containerpilot/releases/do
 && chown elasticsearch /etc
 COPY containerpilot.json /etc/containerpilot.json
 COPY start.sh ./start.sh
-
 
 ENV CP_LOG_LEVEL=ERROR
 ENV CP_TTL=20
