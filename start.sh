@@ -6,9 +6,9 @@ if [ -z "$CONSUL" ]; then
 else
   #update containerpilot conffile
   sed -i "s/\[consul\]/$CONSUL/g" /etc/containerpilot.json
-  sed -i "s/\[loglevel\]/$CP_LOG_LEVEL/g" /etc/containerpilot.json  
-  sed -i "s/\[ttl\]/$CP_TTL/g" /etc/containerpilot.json  
-  sed -i "s/\[poll\]/$CP_POLL/g" /etc/containerpilot.json  
+  sed -i "s/\[loglevel\]/$CP_LOG_LEVEL/g" /etc/containerpilot.json
+  sed -i "s/\[ttl\]/$CP_TTL/g" /etc/containerpilot.json
+  sed -i "s/\[poll\]/$CP_POLL/g" /etc/containerpilot.json
   echo ---------------------------------------------------------------------------
   echo containerPilot conffile
   cat /etc/containerpilot.json
@@ -37,5 +37,5 @@ else
     sleep 3
     echo "All dependencies are ready"
     /bin/containerpilot elasticsearch
-  done  
+  done
 fi
