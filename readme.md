@@ -1,10 +1,8 @@
-Elasticsearch image.
-
-
+Elasticsearch image based on Alpine Linux.
 
 ### Tags
 
-- `2`, `2.3`, `2.3.2`, `latest`
+- `latest`
 
 ### Exposed ports
 
@@ -13,4 +11,4 @@ Elasticsearch image.
 
 ### Env. variables
 
-  - CONSUL: for containerPilot, format ConsulIp:consulPort, if not exist then containerPolot if not used
+  - CONSUL: for amppilot, format is ConsulIp:consulPort, if it's not declared then amppilot is not used
