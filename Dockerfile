@@ -1,30 +1,29 @@
-FROM elasticsearch
+FROM appcelerator/amp:latest
 
-USER root
+RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
+    echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
+    apk --no-cache add elasticsearch gosu@testing
 
-# helpful while debugging, will remove in the future
-RUN apt-get update && apt-get install -y vim bash
+ENV PATH /bin:$PATH
+
+RUN mkdir -p /etc/elasticsearch/scripts /var/log/elasticsearch /var/lib/elasticsearch/data /var/tmp/elasticsearch
+
+COPY config/elasticsearch.yml /etc/elasticsearch/
+COPY config/logging.yml /etc/elasticsearch/
+COPY /bin/docker-entrypoint.sh /bin/
+COPY bin/elasticsearch /bin/
+
+RUN chown -R elastico:elastico /var/lib/elasticsearch /etc/elasticsearch /var/log/elasticsearch /var/tmp/elasticsearch /bin/elasticsearch
+
+VOLUME /var/lib/elasticsearch/data
 
 EXPOSE 9200 9300
 
-# Update configuration file
-COPY elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
-
-# Add ContainerPilot
-ENV CONTAINERPILOT=2.1.0
-RUN curl -Lo /tmp/cb.tar.gz https://github.com/joyent/containerpilot/releases/download/$CONTAINERPILOT/containerpilot-$CONTAINERPILOT.tar.gz \
-&& tar -xz -f /tmp/cb.tar.gz \
-&& mv ./containerpilot /bin/ \
-&& chown elasticsearch /etc
-COPY containerpilot.json /etc/containerpilot.json
-COPY start.sh ./start.sh
-
-ENV CP_LOG_LEVEL=ERROR
-ENV CP_TTL=20
-ENV CP_POLL=5
-ENV CONTAINERPILOT=file:///etc/containerpilot.json
+ENV SERVICE_NAME="elasticsearch"
+ENV AMPPILOT_REGISTEREDPORT="9200"
 ENV DEPENDENCIES="amp-log-agent"
+ENV AMPPILOT_AMPLOGAGENT_ONLYATSTARTUP=true
+ENV AMPPILOT_LOGDIRECTORY="/var/log/elasticsearch/amppilot"
 
-USER elasticsearch
-
-CMD ["./start.sh"]
+ENTRYPOINT ["/bin/docker-entrypoint.sh"]
+CMD ["elasticsearch"]
