@@ -23,6 +23,7 @@ ENV SERVICE_NAME="elasticsearch"
 ENV AMPPILOT_REGISTEREDPORT="9200"
 ENV DEPENDENCIES="amp-log-agent"
 ENV AMPPILOT_AMPLOGAGENT_ONLYATSTARTUP=true
+ENV AMPPILOT_LOGDIRECTORY="/var/log/elasticsearch/amppilot"
 
 ENTRYPOINT ["/bin/docker-entrypoint.sh"]
 CMD ["elasticsearch"]
