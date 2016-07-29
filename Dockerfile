@@ -1,8 +1,6 @@
-FROM appcelerator/amp:latest
+FROM appcelerator/alpine:20160726
 
-RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
-    echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
-    apk --no-cache add elasticsearch gosu@testing
+RUN apk --no-cache add elasticsearch
 
 ENV PATH /bin:$PATH
 
@@ -18,6 +16,7 @@ RUN chown -R elastico:elastico /var/lib/elasticsearch /etc/elasticsearch /var/lo
 VOLUME /var/lib/elasticsearch/data
 
 EXPOSE 9200 9300
+ENV JAVA_HEAP_SIZE=256
 
 ENTRYPOINT ["/bin/docker-entrypoint.sh"]
 CMD ["elasticsearch"]

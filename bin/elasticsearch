@@ -2,7 +2,9 @@
 
 user="elastico"
 group="$(id -gn $user)"
-java_heap_size=${java_heap_size:-"256"}
+java_heap_size=${JAVA_HEAP_SIZE:-"256"}
+echo "INFO - Java Heap Size = ${java_heap_size}M"
+elastic_opts="$@"
 
 conf_dir=${conf_dir:-/etc/elasticsearch}
 home_dir=${home_dir:-/var/lib/elasticsearch}
