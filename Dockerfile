@@ -16,6 +16,7 @@ RUN chown -R elastico:elastico /var/lib/elasticsearch /etc/elasticsearch /var/lo
 VOLUME /var/lib/elasticsearch/data
 
 EXPOSE 9200 9300
+ENV JAVA_HEAP_SIZE=256
 
 ENTRYPOINT ["/bin/docker-entrypoint.sh"]
 CMD ["elasticsearch"]
