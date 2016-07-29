@@ -9,14 +9,6 @@ if [ "${1:0:1}" = '-' ]; then
 fi
 program="$1"
 
-if [[ -n "$CONSUL" && -n "$PILOT" && "$program" = "elasticsearch" ]]; then
-    export AMPPILOT_LAUNCH_CMD="$@"
-    echo "registering in Consul with $PILOT"
-    set -- "$PILOT" "$@"
-else
-    echo "not registering in Consul"
-fi
-
 # Drop root privileges if we are running elasticsearch
 # allow the container to be started with `--user`
 if [[ "$program" = "elasticsearch" && "$(id -u)" = '0' ]]; then

@@ -19,10 +19,5 @@ VOLUME /var/lib/elasticsearch/data
 
 EXPOSE 9200 9300
 
-ENV SERVICE_NAME="elasticsearch"
-ENV AMPPILOT_REGISTEREDPORT="9200"
-ENV DEPENDENCIES="amp-log-agent"
-ENV AMPPILOT_AMPLOGAGENT_ONLYATSTARTUP=true
-
 ENTRYPOINT ["/bin/docker-entrypoint.sh"]
 CMD ["elasticsearch"]
