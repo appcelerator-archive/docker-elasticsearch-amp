@@ -37,7 +37,7 @@ services:
       AMPPILOT_LAUNCH_CMD: elasticsearch
     command: /bin/amppilot/pilotLoader
     labels:
-      - "io.appcelerator.amp.build.mounts=/var/run/docker.sock:/bin/amppilot"
+      - "io.appcelerator.amp.build.mounts=/var/run/docker.sock,/bin/amppilot"
     depends_on:
       - consul
       - pilot
