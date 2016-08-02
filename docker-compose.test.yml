@@ -18,8 +18,6 @@ services:
       CONSUL: consul:8500
     labels:
       - "io.appcelerator.amp.build.mounts=/bin/amppilot"
-    depends_on:
-      - consul
 
   elasticsearch-amp:
     build: .
@@ -31,16 +29,12 @@ services:
       - "9200:9200"
       - "9300:9300"
     environment:
-      DEPENDENCIES: ""
       CONSUL: consul:8500
       SERVICE_NAME: elasticsearch-amp
-      AMPPILOT_LAUNCH_CMD: elasticsearch
+      AMPPILOT_LAUNCH_CMD: "gosu elastico elasticsearch"
     command: /bin/amppilot/pilotLoader
     labels:
       - "io.appcelerator.amp.build.mounts=/var/run/docker.sock,/bin/amppilot"
-    depends_on:
-      - consul
-      - pilot
 
   sut:
     image: appcelerator/sut
@@ -49,3 +43,5 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - elasticsearch-amp
+      - consul
+      - pilot

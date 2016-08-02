@@ -10,8 +10,6 @@ program="$1"
 runes=0
 # Drop root privileges if we are running elasticsearch
 # allow the container to be started with `--user`
-echo "$program" | grep -q amppilot
-if [[ $? -eq 0 ]]; then runes=1; fi
 if [[ "x$program" = "xelasticsearch" ]]; then runes=1; fi
 
 if [[ $runes -eq 1 && "$(id -u)" = '0' ]]; then
