@@ -18,4 +18,5 @@ VOLUME /var/lib/elasticsearch/data
 EXPOSE 9200 9300
 ENV JAVA_HEAP_SIZE=256
 
-CMD ["/bin/docker-entrypoint.sh", "elasticsearch"]
+ENTRYPOINT ["/bin/docker-entrypoint.sh"]
+CMD ["elasticsearch"]
