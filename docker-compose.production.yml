@@ -3,4 +3,4 @@ services:
   elasticsearch-amp:
     build: .
     image: appcelerator/elasticsearch-amp
-    command: "--version"
+    command: "docker-entrypoint.sh elasticsearch --version"
