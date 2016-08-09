@@ -20,5 +20,7 @@ HEALTHCHECK NONE
 EXPOSE 9200 9300
 ENV JAVA_HEAP_SIZE=256
 
+HEALTHCHECK --interval=5s --retries=3 --timeout=1s CMD curl -s localhost:9200 | jq .version.number | grep -qv null
+
 ENTRYPOINT ["/bin/docker-entrypoint.sh"]
 CMD ["elasticsearch"]
