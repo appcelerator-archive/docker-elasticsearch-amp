@@ -3,8 +3,8 @@
 ELASTICSEARCH_URL=http://elasticsearch-amp:9200
 
 echo -n "test elasticsearch availability... "
-maxretries=30
-sleeptime=0.5
+maxretries=60
+sleeptime=1
 while [[ $try -lt $maxretries ]]; do
     version=$(curl -s "$ELASTICSEARCH_URL" | jq .version.number 2>/dev/null)
     if [[ $? -eq 0 && -n "$version" ]]; then
