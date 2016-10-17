@@ -1,4 +1,4 @@
-FROM appcelerator/alpine:20160726
+FROM appcelerator/alpine:20160928
 
 RUN apk --no-cache add elasticsearch
 
