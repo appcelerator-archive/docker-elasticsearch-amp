@@ -1,24 +1,33 @@
 FROM appcelerator/alpine:20160928
 
-RUN apk --no-cache add elasticsearch
+RUN apk update && apk upgrade && apk --no-cache add openjdk8-jre
 
-ENV PATH /bin:$PATH
+ENV PATH /bin:/opt/elasticsearch/bin:$PATH
+ENV ELASTIC_VERSION 5.0.0
 
-RUN mkdir -p /etc/elasticsearch/scripts /var/log/elasticsearch /var/lib/elasticsearch/data /var/tmp/elasticsearch
+RUN curl -L https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ELASTIC_VERSION.tar.gz -o /tmp/elasticsearch-$ELASTIC_VERSION.tar.gz && \
+    mkdir /opt && \
+    tar xzf /tmp/elasticsearch-$ELASTIC_VERSION.tar.gz -C /opt && \
+    ln -s /opt/elasticsearch-$ELASTIC_VERSION /opt/elasticsearch && \
+    rm /opt/elasticsearch/bin/elasticsearch*exe /opt/elasticsearch/bin/elasticsearch*bat && \
+    rm /tmp/elasticsearch-$ELASTIC_VERSION.tar.gz
 
-COPY config/elasticsearch.yml /etc/elasticsearch/
-COPY config/logging.yml /etc/elasticsearch/
+WORKDIR /opt/elasticsearch
+
+COPY config/elasticsearch.yml /opt/elasticsearch/config/elasticsearch.yml.tpl
+COPY config/log4j2.properties /opt/elasticsearch/config/
 COPY /bin/docker-entrypoint.sh /bin/
-COPY bin/elasticsearch /bin/
 
-RUN chown -R elastico:elastico /var/lib/elasticsearch /etc/elasticsearch /var/log/elasticsearch /var/tmp/elasticsearch /bin/elasticsearch
+RUN mkdir -p /opt/elasticsearch/config/scripts
+RUN adduser -D -h /opt/elasticsearch -s /sbin/nologin elastico
+RUN chown -R elastico:elastico /opt/elasticsearch
 
-VOLUME /var/lib/elasticsearch/data
+VOLUME /opt/elasticsearch-$ELASTIC_VERSION/data
 
 EXPOSE 9200 9300
 #ENV JAVA_HEAP_SIZE=256
 
-HEALTHCHECK --interval=5s --retries=3 --timeout=1s CMD curl -s localhost:9200 | jq .version.number | grep -qv null
+HEALTHCHECK --interval=5s --retries=3 --timeout=1s CMD curl -s 127.0.0.1:9200 | jq .version.number | grep -qv null
 
 ENTRYPOINT ["/bin/docker-entrypoint.sh"]
 CMD ["elasticsearch"]
