@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ES_CONF=/opt/elasticsearch/config/elasticsearch.yml
+
 # Add elasticsearch as command if needed
 if [ "${1:0:1}" = '-' ]; then
     echo "INFO - adding arguments $@ to elasticsearch"
@@ -7,7 +9,7 @@ if [ "${1:0:1}" = '-' ]; then
 fi
 program="$1"
 
-if [[ -z "$JAVA_HEAP_SIZE" ]]; then
+if [[ -z "$ES_JAVA_OPTS" && -z "$JAVA_HEAP_SIZE" ]]; then
   # adjust max heap size to available memory
   if [[ -f /proc/meminfo ]]; then
     tmem=$(grep MemTotal /proc/meminfo | awk '{print int($2 * 0.001)}')
@@ -24,9 +26,28 @@ if [[ -z "$JAVA_HEAP_SIZE" ]]; then
         JAVA_HEAP_SIZE=$((tmem / 10))
     fi
     export JAVA_HEAP_SIZE
+    echo "Java Heap Size: $JAVA_HEAP_SIZE MB"
   else
     echo "WARN - can't read /proc/meminfo, using default java heap size value"
   fi
+fi
+if [[ -n "$JAVA_HEAP_SIZE" ]]; then
+  ES_JAVA_OPTS="$ES_JAVA_OPTS -Xms${JAVA_HEAP_SIZE}M -Xmx${JAVA_HEAP_SIZE}M ${java_max_direct_mem_size:+"-XX:MaxDirectMemorySize=$java_max_direct_mem_size"} $java_opts"
+  export ES_JAVA_OPTS
+fi
+
+if [ -n "$max_fd" ]; then
+    ulimit -n "$max_fd" && echo "Max open filedescriptors: $max_fd"
+fi
+
+if [[ -f $ES_CONF.tpl ]]; then
+    mv $ES_CONF $ES_CONF.bak
+    envtpl $ES_CONF.tpl
+    if [[ $? -ne 0 ]]; then
+        echo "WARNING - configuration file update failed"
+        echo "WARNING - using default configuration instead"
+        mv $ES_CONF.bak $ES_CONF
+    fi
 fi
 
 runes=0
@@ -36,8 +57,8 @@ if [[ "x$program" = "xelasticsearch" ]]; then runes=1; fi
 
 if [[ $runes -eq 1 && "$(id -u)" = '0' ]]; then
     echo "INFO - setting user perms on elasticsearch data dir"
-    # Change the ownership of /var/lib/elasticsearch/data to elasticsearch
-    chown -R elastico:elastico /var/lib/elasticsearch/data
+    # Change the ownership of /opt/elasticsearch/data to elasticsearch
+    chown -R elastico:elastico /opt/elasticsearch/data
     
     echo "INFO - running $1 as user elastico"
     set -- gosu elastico "$@"
