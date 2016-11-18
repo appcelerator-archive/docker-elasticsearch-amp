@@ -3,7 +3,7 @@ FROM appcelerator/alpine:20160928
 RUN apk update && apk upgrade && apk --no-cache add openjdk8-jre
 
 ENV PATH /bin:/opt/elasticsearch/bin:$PATH
-ENV ELASTIC_VERSION 5.0.0
+ENV ELASTIC_VERSION 5.0.1
 
 RUN curl -L https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ELASTIC_VERSION.tar.gz -o /tmp/elasticsearch-$ELASTIC_VERSION.tar.gz && \
     mkdir /opt && \
@@ -27,7 +27,7 @@ VOLUME /opt/elasticsearch-$ELASTIC_VERSION/data
 EXPOSE 9200 9300
 #ENV JAVA_HEAP_SIZE=256
 
-HEALTHCHECK --interval=5s --retries=3 --timeout=1s CMD curl -s 127.0.0.1:9200 | jq .version.number | grep -qv null
+HEALTHCHECK --interval=15s --retries=3 --timeout=5s CMD curl -s 127.0.0.1:9200 | jq .version.number | grep -qv null
 
 ENTRYPOINT ["/bin/docker-entrypoint.sh"]
 CMD ["elasticsearch"]
