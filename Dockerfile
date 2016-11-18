@@ -1,6 +1,6 @@
 FROM appcelerator/alpine:20160928
 
-RUN apk --no-cache add elasticsearch
+RUN apk --no-cache add elasticsearch@community
 
 ENV PATH /bin:$PATH
 
