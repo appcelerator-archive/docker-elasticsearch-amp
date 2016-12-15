@@ -5,7 +5,7 @@
 ### Tags
 
 - `2.3`, `2.3.5`
-- `5.0.1`, `latest`
+- `5.0.2`, `latest`
 
 ### Exposed ports
 

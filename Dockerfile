@@ -3,17 +3,18 @@ FROM appcelerator/alpine:20160928
 RUN apk update && apk upgrade && apk --no-cache add openjdk8-jre
 
 ENV PATH /bin:/opt/elasticsearch/bin:$PATH
-ENV ELASTIC_VERSION 5.0.1
+ENV ELASTIC_VERSION 5.0.2
 
 RUN curl -L https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ELASTIC_VERSION.tar.gz -o /tmp/elasticsearch-$ELASTIC_VERSION.tar.gz && \
     mkdir /opt && \
     tar xzf /tmp/elasticsearch-$ELASTIC_VERSION.tar.gz -C /opt && \
     ln -s /opt/elasticsearch-$ELASTIC_VERSION /opt/elasticsearch && \
-    rm /opt/elasticsearch/bin/elasticsearch*exe /opt/elasticsearch/bin/elasticsearch*bat && \
+    rm -f /opt/elasticsearch/bin/elasticsearch*exe /opt/elasticsearch/bin/elasticsearch*bat && \
     rm /tmp/elasticsearch-$ELASTIC_VERSION.tar.gz
 
 WORKDIR /opt/elasticsearch
 
+COPY config/java.policy /opt/elasticsearch/config/java.policy
 COPY config/elasticsearch.yml /opt/elasticsearch/config/elasticsearch.yml.tpl
 COPY config/log4j2.properties /opt/elasticsearch/config/
 COPY /bin/docker-entrypoint.sh /bin/

@@ -35,6 +35,8 @@ if [[ -n "$JAVA_HEAP_SIZE" ]]; then
   ES_JAVA_OPTS="$ES_JAVA_OPTS -Xms${JAVA_HEAP_SIZE}M -Xmx${JAVA_HEAP_SIZE}M ${java_max_direct_mem_size:+"-XX:MaxDirectMemorySize=$java_max_direct_mem_size"} $java_opts"
   export ES_JAVA_OPTS
 fi
+ES_JAVA_OPTS="${ES_JAVA_OPTS} -Djava.security.policy=file:///opt/elasticsearch/config/java.policy"
+export ES_JAVA_OPTS
 
 if [ -n "$max_fd" ]; then
     ulimit -n "$max_fd" && echo "Max open filedescriptors: $max_fd"
