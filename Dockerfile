@@ -3,7 +3,7 @@ FROM appcelerator/alpine:20160928
 RUN apk update && apk upgrade && apk --no-cache add openjdk8-jre
 
 ENV PATH /bin:/opt/elasticsearch/bin:$PATH
-ENV ELASTIC_VERSION 5.0.2
+ENV ELASTIC_VERSION 5.1.1
 
 RUN curl -L https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-$ELASTIC_VERSION.tar.gz -o /tmp/elasticsearch-$ELASTIC_VERSION.tar.gz && \
     mkdir /opt && \
