@@ -40,11 +40,6 @@ export ES_JAVA_OPTS
 
 echo -n "Hard limit max open fd:"
 ulimit -Hn
-minfdl=65536
-fdl=$(ulimit -n)
-if [ $fdl -lt $minfdl ]; then
-    ulimit -n $minfdl
-fi
 echo -n "Max open fd:"
 ulimit -n
 
