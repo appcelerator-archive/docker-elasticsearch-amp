@@ -1,4 +1,4 @@
-FROM appcelerator/alpine:20160928
+FROM appcelerator/alpine:3.5.0
 
 RUN apk update && apk upgrade && apk --no-cache add openjdk8-jre
 

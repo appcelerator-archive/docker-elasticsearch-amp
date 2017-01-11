@@ -38,9 +38,15 @@ fi
 ES_JAVA_OPTS="${ES_JAVA_OPTS} -Djava.security.policy=file:///opt/elasticsearch/config/java.policy"
 export ES_JAVA_OPTS
 
-if [ -n "$max_fd" ]; then
-    ulimit -n "$max_fd" && echo "Max open filedescriptors: $max_fd"
+echo -n "Hard limit max open fd:"
+ulimit -Hn
+minfdl=65536
+fdl=$(ulimit -n)
+if [ $fdl -lt $minfdl ]; then
+    ulimit -n $minfdl
 fi
+echo -n "Max open fd:"
+ulimit -n
 
 if [[ -f $ES_CONF.tpl ]]; then
     mv $ES_CONF $ES_CONF.bak
