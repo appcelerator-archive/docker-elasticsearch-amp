@@ -45,7 +45,7 @@ ulimit -n
 
 if [[ -f $ES_CONF.tpl ]]; then
     mv $ES_CONF $ES_CONF.bak
-    envtpl $ES_CONF.tpl
+    envtpl -o $ES_CONF $ES_CONF.tpl && rm $ES_CONF.tpl
     if [[ $? -ne 0 ]]; then
         echo "WARNING - configuration file update failed"
         echo "WARNING - using default configuration instead"
